@@ -1,23 +1,21 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: k8s
+  name: myapp-argo-app
+  namespace: argocd
 spec:
-  destination:
-    name: ''
-    namespace: argocd
-    server: 'https://kubernetes.default.svc'
+  project: default
   source:
-    path: .
-    repoURL: 'https://github.com/ibrahimmalii/k8s.git'
-    targetRevision: HEAD
-    directory:
-      jsonnet:
-        tlas:
-          - {}
-  sources: []
-  project: argo
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+      repoURL: https://github.com/ibrahimmalii/k8s.git
+      targetRevision: HEAD
+      path: .
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: default
+
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+        - CreateNamespace=true
